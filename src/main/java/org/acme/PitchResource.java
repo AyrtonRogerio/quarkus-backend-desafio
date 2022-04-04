@@ -1,5 +1,6 @@
 package org.acme;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -28,12 +29,14 @@ public class PitchResource {
 
     @POST
     @Transactional
-    public void criarPitch(PitchDTO dto){
+    public void criarPitch(Pitch p){
 
-        Pitch p = new Pitch();
-        p.textoPitch = dto.textoPitch;
-        p.serie_investimento = dto.serie_investimento;        
+        //Pitch p = new Pitch();
+      //  p.textoPitch = dto.textoPitch;
+      //  p.serie_investimento = dto.serie_investimento;
+
         p.persist();
+        
 
     }
 
@@ -67,5 +70,27 @@ public class PitchResource {
         });
 
     }
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public List<Pitch> buscarPorLocalQtdFuncionariosInvestimento(Pitch pitch) {
+      
+      List<Pitch> pitchs = new ArrayList<Pitch>();
+      List<Pitch> pitchsSerieInvestimentos = Pitch.find("serie_invetimento like ?1", pitch.serie_investimento).list();
+      
+      List<Startup> startups=Startup.find("local like ?1 and funcionarios <= ?2 ", pitch.startup.local,pitch.startup.funcionarios).list();
+      
+      for (Startup startup : startups) {
+        for(Pitch p:pitchsSerieInvestimentos){
+          if(startup==p.startup){
+            pitchs.add(p);
+          }
+        }
+      }
+  
+      return pitchs;
+    } 
 
 }

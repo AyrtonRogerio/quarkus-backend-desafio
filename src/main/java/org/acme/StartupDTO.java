@@ -7,7 +7,7 @@ public class StartupDTO {
     
     public String local;
     public int funcionarios;
-    public String serie_investimento;   
+       
     
 
 }
