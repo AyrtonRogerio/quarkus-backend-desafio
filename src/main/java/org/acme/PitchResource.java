@@ -13,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 
@@ -29,7 +30,7 @@ public class PitchResource {
 
     @POST
     @Transactional
-    public void criarPitch(Pitch p){
+    public Pitch criarPitch(Pitch p){
 
         //Pitch p = new Pitch();
       //  p.textoPitch = dto.textoPitch;
@@ -37,7 +38,7 @@ public class PitchResource {
 
         p.persist();
         
-
+        return p;
     }
 
     @PUT
@@ -73,17 +74,18 @@ public class PitchResource {
 
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Path("buscar")
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<Pitch> buscarPorLocalQtdFuncionariosInvestimento(Pitch pitch) {
+    public ArrayList<Pitch> buscarPorLocalQtdFuncionariosInvestimento(@QueryParam("serie_investimento") String investimento, @QueryParam("local") String local, 
+     @QueryParam("funcionarios") int func) {
       
-      List<Pitch> pitchs = new ArrayList<Pitch>();
-      List<Pitch> pitchsSerieInvestimentos = Pitch.find("serie_invetimento like ?1", pitch.serie_investimento).list();
+      ArrayList<Pitch> pitchs = new ArrayList<Pitch>();
+      List<Pitch> pitchsInvestimentos = Pitch.find("serie_investimento like ?1", investimento).list();
       
-      List<Startup> startups=Startup.find("local like ?1 and funcionarios <= ?2 ", pitch.startup.local,pitch.startup.funcionarios).list();
+      List<Startup> startups=Startup.find("local like ?1 and funcionarios <= ?2 ", local, func).list();
       
       for (Startup startup : startups) {
-        for(Pitch p:pitchsSerieInvestimentos){
+        for(Pitch p:pitchsInvestimentos){
           if(startup==p.startup){
             pitchs.add(p);
           }

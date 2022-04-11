@@ -40,7 +40,7 @@ public class StartupResource {
     @Path("startup/{funcionarios}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<Startup> listaStartupsFuncionario(@PathParam("funcionarios") String funcionarios) {
+    public List<Startup> listaStartupsFuncionario(@PathParam("funcionarios") Integer funcionarios) {
         return Startup.list("funcionarios", funcionarios);/*.singleResultOptional()
         .map(startup -> Response.ok(startup).build()).
         orElse(Response.status(Response.Status.NOT_FOUND).build());*/
@@ -84,11 +84,11 @@ public class StartupResource {
     @DELETE
     @Path("{id}")
     @Transactional
-    public void buscarTodosProdutos(@PathParam("id") Long id) {
+    public void deletarStartup(@PathParam("id") Long id) {
 
-        Optional<Pitch> pitchOp = Pitch.findByIdOptional(id);
+        Optional<Startup> startupOp = Startup.findByIdOptional(id);
 
-        pitchOp.ifPresentOrElse(Pitch::delete, () -> {
+        startupOp.ifPresentOrElse(Startup::delete, () -> {
             throw new NotFoundException();
         });
 
