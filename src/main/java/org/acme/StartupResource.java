@@ -1,5 +1,6 @@
 package org.acme;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -12,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -34,6 +36,9 @@ public class StartupResource {
         .map(startup -> Response.ok(startup).build()).
         orElse(Response.status(Response.Status.NOT_FOUND).build());*/
     }
+
+
+    
 
     //colocar pra funcionar ainda 
     @GET
